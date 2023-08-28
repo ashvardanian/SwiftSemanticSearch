@@ -13,9 +13,9 @@ While this demo focuses on 2D vectors for geospatial search, the USearch library
 ## Usage
 
 ```bash
-git clone https://github.com/your-username/USearchMobile.git
-cd USearchMobile
-open USearchMobile.xcodeproj
+git clone https://github.com/your-username/SwiftVectorSearch.git
+cd SwiftVectorSearch
+open SwiftVectorSearch.xcodeproj
 ```
 
 Requirements:

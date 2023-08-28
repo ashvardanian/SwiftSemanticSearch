@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A23025212A6D8DAC00184207 /* USearchMobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23025202A6D8DAC00184207 /* USearchMobileApp.swift */; };
+		A23025212A6D8DAC00184207 /* SwiftVectorSearchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23025202A6D8DAC00184207 /* SwiftVectorSearchApp.swift */; };
 		A23025252A6D8DAD00184207 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A23025242A6D8DAD00184207 /* Assets.xcassets */; };
 		A23025282A6D8DAD00184207 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A23025272A6D8DAD00184207 /* Preview Assets.xcassets */; };
 		A23025302A6D8DED00184207 /* USearch in Frameworks */ = {isa = PBXBuildFile; productRef = A230252F2A6D8DED00184207 /* USearch */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A230251D2A6D8DAC00184207 /* USearchMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = USearchMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A23025202A6D8DAC00184207 /* USearchMobileApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USearchMobileApp.swift; sourceTree = "<group>"; };
+		A230251D2A6D8DAC00184207 /* SwiftVectorSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftVectorSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A23025202A6D8DAC00184207 /* SwiftVectorSearchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftVectorSearchApp.swift; sourceTree = "<group>"; };
 		A23025242A6D8DAD00184207 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A23025272A6D8DAD00184207 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -35,7 +35,7 @@
 		A23025142A6D8DAC00184207 = {
 			isa = PBXGroup;
 			children = (
-				A230251F2A6D8DAC00184207 /* USearchMobile */,
+				A230251F2A6D8DAC00184207 /* SwiftVectorSearch */,
 				A230251E2A6D8DAC00184207 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,19 +43,19 @@
 		A230251E2A6D8DAC00184207 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A230251D2A6D8DAC00184207 /* USearchMobile.app */,
+				A230251D2A6D8DAC00184207 /* SwiftVectorSearch.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A230251F2A6D8DAC00184207 /* USearchMobile */ = {
+		A230251F2A6D8DAC00184207 /* SwiftVectorSearch */ = {
 			isa = PBXGroup;
 			children = (
-				A23025202A6D8DAC00184207 /* USearchMobileApp.swift */,
+				A23025202A6D8DAC00184207 /* SwiftVectorSearchApp.swift */,
 				A23025242A6D8DAD00184207 /* Assets.xcassets */,
 				A23025262A6D8DAD00184207 /* Preview Content */,
 			);
-			path = USearchMobile;
+			path = SwiftVectorSearch;
 			sourceTree = "<group>";
 		};
 		A23025262A6D8DAD00184207 /* Preview Content */ = {
@@ -69,9 +69,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A230251C2A6D8DAC00184207 /* USearchMobile */ = {
+		A230251C2A6D8DAC00184207 /* SwiftVectorSearch */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A230252B2A6D8DAD00184207 /* Build configuration list for PBXNativeTarget "USearchMobile" */;
+			buildConfigurationList = A230252B2A6D8DAD00184207 /* Build configuration list for PBXNativeTarget "SwiftVectorSearch" */;
 			buildPhases = (
 				A23025192A6D8DAC00184207 /* Sources */,
 				A230251A2A6D8DAC00184207 /* Frameworks */,
@@ -81,12 +81,12 @@
 			);
 			dependencies = (
 			);
-			name = USearchMobile;
+			name = SwiftVectorSearch;
 			packageProductDependencies = (
 				A230252F2A6D8DED00184207 /* USearch */,
 			);
-			productName = USearchMobile;
-			productReference = A230251D2A6D8DAC00184207 /* USearchMobile.app */;
+			productName = SwiftVectorSearch;
+			productReference = A230251D2A6D8DAC00184207 /* SwiftVectorSearch.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -104,7 +104,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A23025182A6D8DAC00184207 /* Build configuration list for PBXProject "USearchMobile" */;
+			buildConfigurationList = A23025182A6D8DAC00184207 /* Build configuration list for PBXProject "SwiftVectorSearch" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -120,7 +120,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A230251C2A6D8DAC00184207 /* USearchMobile */,
+				A230251C2A6D8DAC00184207 /* SwiftVectorSearch */,
 			);
 		};
 /* End PBXProject section */
@@ -142,7 +142,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A23025212A6D8DAC00184207 /* USearchMobileApp.swift in Sources */,
+				A23025212A6D8DAC00184207 /* SwiftVectorSearchApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,7 +270,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"USearchMobile/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"SwiftVectorSearch/Preview Content\"";
 				DEVELOPMENT_TEAM = 4J62EE2G74;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -284,7 +284,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ashvardanian.USearchMobile;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ashvardanian.SwiftVectorSearch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -299,7 +299,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"USearchMobile/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"SwiftVectorSearch/Preview Content\"";
 				DEVELOPMENT_TEAM = 4J62EE2G74;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -313,7 +313,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ashvardanian.USearchMobile;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ashvardanian.SwiftVectorSearch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -324,7 +324,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A23025182A6D8DAC00184207 /* Build configuration list for PBXProject "USearchMobile" */ = {
+		A23025182A6D8DAC00184207 /* Build configuration list for PBXProject "SwiftVectorSearch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A23025292A6D8DAD00184207 /* Debug */,
@@ -333,7 +333,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A230252B2A6D8DAD00184207 /* Build configuration list for PBXNativeTarget "USearchMobile" */ = {
+		A230252B2A6D8DAD00184207 /* Build configuration list for PBXNativeTarget "SwiftVectorSearch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A230252C2A6D8DAD00184207 /* Debug */,

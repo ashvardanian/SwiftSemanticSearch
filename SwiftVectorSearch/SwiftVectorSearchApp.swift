@@ -1,6 +1,6 @@
 //
-//  USearchMobileApp.swift
-//  USearchMobile
+//  SwiftVectorSearchApp.swift
+//  SwiftVectorSearch
 //
 //  Created by Ashot Vardanian on 7/23/23.
 //
@@ -94,7 +94,7 @@ struct MapView: UIViewRepresentable {
 
 
 @main
-struct USearchMobileApp: App {
+struct SwiftVectorSearchApp: App {
     @StateObject var searchManager = SearchManager()
     @State private var centerCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 40.18306093751397, longitude: 44.52643090940268)
     
