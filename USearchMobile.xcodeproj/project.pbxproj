@@ -8,15 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		A23025212A6D8DAC00184207 /* USearchMobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23025202A6D8DAC00184207 /* USearchMobileApp.swift */; };
-		A23025232A6D8DAC00184207 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23025222A6D8DAC00184207 /* ContentView.swift */; };
 		A23025252A6D8DAD00184207 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A23025242A6D8DAD00184207 /* Assets.xcassets */; };
 		A23025282A6D8DAD00184207 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A23025272A6D8DAD00184207 /* Preview Assets.xcassets */; };
+		A23025302A6D8DED00184207 /* USearch in Frameworks */ = {isa = PBXBuildFile; productRef = A230252F2A6D8DED00184207 /* USearch */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A230251D2A6D8DAC00184207 /* USearchMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = USearchMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A23025202A6D8DAC00184207 /* USearchMobileApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USearchMobileApp.swift; sourceTree = "<group>"; };
-		A23025222A6D8DAC00184207 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A23025242A6D8DAD00184207 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A23025272A6D8DAD00184207 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -26,6 +25,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A23025302A6D8DED00184207 /* USearch in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,7 +52,6 @@
 			isa = PBXGroup;
 			children = (
 				A23025202A6D8DAC00184207 /* USearchMobileApp.swift */,
-				A23025222A6D8DAC00184207 /* ContentView.swift */,
 				A23025242A6D8DAD00184207 /* Assets.xcassets */,
 				A23025262A6D8DAD00184207 /* Preview Content */,
 			);
@@ -83,6 +82,9 @@
 			dependencies = (
 			);
 			name = USearchMobile;
+			packageProductDependencies = (
+				A230252F2A6D8DED00184207 /* USearch */,
+			);
 			productName = USearchMobile;
 			productReference = A230251D2A6D8DAC00184207 /* USearchMobile.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +113,9 @@
 				Base,
 			);
 			mainGroup = A23025142A6D8DAC00184207;
+			packageReferences = (
+				A230252E2A6D8DED00184207 /* XCRemoteSwiftPackageReference "usearch" */,
+			);
 			productRefGroup = A230251E2A6D8DAC00184207 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -137,7 +142,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A23025232A6D8DAC00184207 /* ContentView.swift in Sources */,
 				A23025212A6D8DAC00184207 /* USearchMobileApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -339,6 +343,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A230252E2A6D8DED00184207 /* XCRemoteSwiftPackageReference "usearch" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/unum-cloud/usearch";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A230252F2A6D8DED00184207 /* USearch */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A230252E2A6D8DED00184207 /* XCRemoteSwiftPackageReference "usearch" */;
+			productName = USearch;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A23025152A6D8DAC00184207 /* Project object */;
 }
