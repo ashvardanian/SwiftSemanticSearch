@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "usearch",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/unum-cloud/usearch",
+      "state" : {
+        "branch" : "main",
+        "revision" : "b1ea6ac208740dfdb68cfe846e3cb955fe38dc5a"
+      }
+    }
+  ],
+  "version" : 2
+}
