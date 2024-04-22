@@ -11,6 +11,11 @@
 		A208E9DE2BCB3A20005F91B5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A208E9DD2BCB3A20005F91B5 /* ContentView.swift */; };
 		A208E9E02BCB3A21005F91B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A208E9DF2BCB3A21005F91B5 /* Assets.xcassets */; };
 		A208E9E32BCB3A21005F91B5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A208E9E22BCB3A21005F91B5 /* Preview Assets.xcassets */; };
+		A297E7C42BD6FFCA00C478C2 /* UForm in Frameworks */ = {isa = PBXBuildFile; productRef = A297E7C32BD6FFCA00C478C2 /* UForm */; };
+		A2EABA6C2BCB4C8500CB4341 /* images.uform-vl-english-small.fbin in Resources */ = {isa = PBXBuildFile; fileRef = A2EABA692BCB4C8500CB4341 /* images.uform-vl-english-small.fbin */; };
+		A2EABA6E2BCB4C8500CB4341 /* images.names.txt in Resources */ = {isa = PBXBuildFile; fileRef = A2EABA6B2BCB4C8500CB4341 /* images.names.txt */; };
+		A2EABA6F2BCB4F7700CB4341 /* images in Resources */ = {isa = PBXBuildFile; fileRef = A2EABA6A2BCB4C8500CB4341 /* images */; };
+		A2EABA722BCB50CE00CB4341 /* USearch in Frameworks */ = {isa = PBXBuildFile; productRef = A2EABA712BCB50CE00CB4341 /* USearch */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +24,9 @@
 		A208E9DD2BCB3A20005F91B5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A208E9DF2BCB3A21005F91B5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A208E9E22BCB3A21005F91B5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		A2EABA692BCB4C8500CB4341 /* images.uform-vl-english-small.fbin */ = {isa = PBXFileReference; lastKnownFileType = file; path = "images.uform-vl-english-small.fbin"; sourceTree = "<group>"; };
+		A2EABA6A2BCB4C8500CB4341 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		A2EABA6B2BCB4C8500CB4341 /* images.names.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = images.names.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +34,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A297E7C42BD6FFCA00C478C2 /* UForm in Frameworks */,
+				A2EABA722BCB50CE00CB4341 /* USearch in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -35,8 +45,12 @@
 		A208E9CF2BCB3A20005F91B5 = {
 			isa = PBXGroup;
 			children = (
+				A2EABA6A2BCB4C8500CB4341 /* images */,
+				A2EABA6B2BCB4C8500CB4341 /* images.names.txt */,
+				A2EABA692BCB4C8500CB4341 /* images.uform-vl-english-small.fbin */,
 				A208E9DA2BCB3A20005F91B5 /* SwiftSemanticSearch */,
 				A208E9D92BCB3A20005F91B5 /* Products */,
+				A2236C0A2BCB602400449368 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +81,13 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		A2236C0A2BCB602400449368 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -83,6 +104,10 @@
 			dependencies = (
 			);
 			name = SwiftSemanticSearch;
+			packageProductDependencies = (
+				A2EABA712BCB50CE00CB4341 /* USearch */,
+				A297E7C32BD6FFCA00C478C2 /* UForm */,
+			);
 			productName = SwiftSemanticSearch;
 			productReference = A208E9D82BCB3A20005F91B5 /* SwiftSemanticSearch.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +136,10 @@
 				Base,
 			);
 			mainGroup = A208E9CF2BCB3A20005F91B5;
+			packageReferences = (
+				A2EABA702BCB50CE00CB4341 /* XCRemoteSwiftPackageReference "usearch" */,
+				A297E7C22BD6FFCA00C478C2 /* XCRemoteSwiftPackageReference "uform" */,
+			);
 			productRefGroup = A208E9D92BCB3A20005F91B5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -127,6 +156,9 @@
 			files = (
 				A208E9E32BCB3A21005F91B5 /* Preview Assets.xcassets in Resources */,
 				A208E9E02BCB3A21005F91B5 /* Assets.xcassets in Resources */,
+				A2EABA6E2BCB4C8500CB4341 /* images.names.txt in Resources */,
+				A2EABA6C2BCB4C8500CB4341 /* images.uform-vl-english-small.fbin in Resources */,
+				A2EABA6F2BCB4F7700CB4341 /* images in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +376,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A297E7C22BD6FFCA00C478C2 /* XCRemoteSwiftPackageReference "uform" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ashvardanian/uform/";
+			requirement = {
+				kind = revision;
+				revision = ffca7f6dcaa6fbbf266f7e705a47530aa1691658;
+			};
+		};
+		A2EABA702BCB50CE00CB4341 /* XCRemoteSwiftPackageReference "usearch" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/unum-cloud/usearch";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A297E7C32BD6FFCA00C478C2 /* UForm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A297E7C22BD6FFCA00C478C2 /* XCRemoteSwiftPackageReference "uform" */;
+			productName = UForm;
+		};
+		A2EABA712BCB50CE00CB4341 /* USearch */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A2EABA702BCB50CE00CB4341 /* XCRemoteSwiftPackageReference "usearch" */;
+			productName = USearch;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A208E9D02BCB3A20005F91B5 /* Project object */;
 }
