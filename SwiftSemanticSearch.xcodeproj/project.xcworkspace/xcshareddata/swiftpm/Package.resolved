@@ -1,4 +1,5 @@
 {
+  "originHash" : "d656e0cf1af1465a0b1b294bf39bad4c24a1b7eecd71a3f8bc76a1d6dbf5758c",
   "pins" : [
     {
       "identity" : "swift-argument-parser",
@@ -15,6 +16,15 @@
       "location" : "https://github.com/ashvardanian/swift-transformers",
       "state" : {
         "revision" : "89fb5d97e1df347f9f588f62fc538dcad6fdb16c"
+      }
+    },
+    {
+      "identity" : "swiftuix",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftUIX/SwiftUIX.git",
+      "state" : {
+        "revision" : "a5a22a1aaca885c229f475af049d75a6d9144de8",
+        "version" : "0.1.9"
       }
     },
     {
@@ -35,5 +45,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
