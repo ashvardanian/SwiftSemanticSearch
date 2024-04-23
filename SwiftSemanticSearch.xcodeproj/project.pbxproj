@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		46B4675C2BD707EF009D6420 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 46B4675B2BD707EF009D6420 /* SwiftUIX */; };
+		46B4675E2BD70804009D6420 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B4675D2BD70804009D6420 /* ImageModel.swift */; };
 		A208E9DC2BCB3A20005F91B5 /* SwiftSemanticSearchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A208E9DB2BCB3A20005F91B5 /* SwiftSemanticSearchApp.swift */; };
 		A208E9DE2BCB3A20005F91B5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A208E9DD2BCB3A20005F91B5 /* ContentView.swift */; };
 		A208E9E02BCB3A21005F91B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A208E9DF2BCB3A21005F91B5 /* Assets.xcassets */; };
@@ -19,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		46B4675D2BD70804009D6420 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		A208E9D82BCB3A20005F91B5 /* SwiftSemanticSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftSemanticSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A208E9DB2BCB3A20005F91B5 /* SwiftSemanticSearchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSemanticSearchApp.swift; sourceTree = "<group>"; };
 		A208E9DD2BCB3A20005F91B5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -34,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46B4675C2BD707EF009D6420 /* SwiftUIX in Frameworks */,
 				A297E7C42BD6FFCA00C478C2 /* UForm in Frameworks */,
 				A2EABA722BCB50CE00CB4341 /* USearch in Frameworks */,
 			);
@@ -65,8 +69,9 @@
 		A208E9DA2BCB3A20005F91B5 /* SwiftSemanticSearch */ = {
 			isa = PBXGroup;
 			children = (
-				A208E9DB2BCB3A20005F91B5 /* SwiftSemanticSearchApp.swift */,
 				A208E9DD2BCB3A20005F91B5 /* ContentView.swift */,
+				46B4675D2BD70804009D6420 /* ImageModel.swift */,
+				A208E9DB2BCB3A20005F91B5 /* SwiftSemanticSearchApp.swift */,
 				A208E9DF2BCB3A21005F91B5 /* Assets.xcassets */,
 				A208E9E12BCB3A21005F91B5 /* Preview Content */,
 			);
@@ -107,6 +112,7 @@
 			packageProductDependencies = (
 				A2EABA712BCB50CE00CB4341 /* USearch */,
 				A297E7C32BD6FFCA00C478C2 /* UForm */,
+				46B4675B2BD707EF009D6420 /* SwiftUIX */,
 			);
 			productName = SwiftSemanticSearch;
 			productReference = A208E9D82BCB3A20005F91B5 /* SwiftSemanticSearch.app */;
@@ -139,6 +145,7 @@
 			packageReferences = (
 				A2EABA702BCB50CE00CB4341 /* XCRemoteSwiftPackageReference "usearch" */,
 				A297E7C22BD6FFCA00C478C2 /* XCRemoteSwiftPackageReference "uform" */,
+				46B4675A2BD707EF009D6420 /* XCRemoteSwiftPackageReference "SwiftUIX" */,
 			);
 			productRefGroup = A208E9D92BCB3A20005F91B5 /* Products */;
 			projectDirPath = "";
@@ -170,6 +177,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A208E9DE2BCB3A20005F91B5 /* ContentView.swift in Sources */,
+				46B4675E2BD70804009D6420 /* ImageModel.swift in Sources */,
 				A208E9DC2BCB3A20005F91B5 /* SwiftSemanticSearchApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -304,7 +312,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftSemanticSearch/Preview Content\"";
-				DEVELOPMENT_TEAM = 4J62EE2G74;
+				DEVELOPMENT_TEAM = 4PWQ7VFGWM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -333,7 +341,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftSemanticSearch/Preview Content\"";
-				DEVELOPMENT_TEAM = 4J62EE2G74;
+				DEVELOPMENT_TEAM = 4PWQ7VFGWM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -378,6 +386,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		46B4675A2BD707EF009D6420 /* XCRemoteSwiftPackageReference "SwiftUIX" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.9;
+			};
+		};
 		A297E7C22BD6FFCA00C478C2 /* XCRemoteSwiftPackageReference "uform" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ashvardanian/uform/";
@@ -397,6 +413,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		46B4675B2BD707EF009D6420 /* SwiftUIX */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46B4675A2BD707EF009D6420 /* XCRemoteSwiftPackageReference "SwiftUIX" */;
+			productName = SwiftUIX;
+		};
 		A297E7C32BD6FFCA00C478C2 /* UForm */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A297E7C22BD6FFCA00C478C2 /* XCRemoteSwiftPackageReference "uform" */;
