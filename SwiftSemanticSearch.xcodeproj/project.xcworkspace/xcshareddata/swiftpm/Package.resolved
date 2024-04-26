@@ -1,5 +1,4 @@
 {
-  "originHash" : "d656e0cf1af1465a0b1b294bf39bad4c24a1b7eecd71a3f8bc76a1d6dbf5758c",
   "pins" : [
     {
       "identity" : "swift-argument-parser",
@@ -41,9 +40,9 @@
       "location" : "https://github.com/unum-cloud/usearch",
       "state" : {
         "branch" : "main",
-        "revision" : "b1ea6ac208740dfdb68cfe846e3cb955fe38dc5a"
+        "revision" : "32bb96f3df3b295350d591f75d1068e59aa64f79"
       }
     }
   ],
-  "version" : 3
+  "version" : 2
 }

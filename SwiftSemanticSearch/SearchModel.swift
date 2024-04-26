@@ -4,22 +4,28 @@
 
 import Accelerate
 import Combine
-import Hub
 import SwiftUI
+
 import UForm
+import USearch
 
 @globalActor
-final public actor UFormActor: GlobalActor {
-    static public var shared = UFormActor()
+final public actor SearchActor: GlobalActor {
+    static public var shared = SearchActor()
 }
 
-class ImageModel: ObservableObject {
+class SearchModel: ObservableObject {
+
+    @Published var allImageNames: [String] = []
+    @Published var statusMessage = ""
+
     @MainActor
-    @Published var imageNames: [String] = []
-    var allImageNames: [String] = []
+    @Published var textEncoder: TextEncoder?
     @MainActor
-    @Published var textModel: TextEncoder?
-    
+    @Published var imageEncoder: ImageEncoder?
+    @MainActor
+    @Published var imageIndex: USearchIndex?
+
     var rows: UInt32 = 0
     var columns: UInt32 = 0
     var matrix: [[Float]]?
@@ -80,23 +86,29 @@ class ImageModel: ObservableObject {
         }
     }
     
-    @UFormActor
+    @SearchActor
     func filteredAndSortedImages(
         query: String
     ) async throws -> [String] {
-        print("Wants to filter images by \(query)")
-        guard let textModel = await textModel, !query.isEmpty, let matrix = matrix else {
+        
+        if query.isEmpty {
             return allImageNames
+        }
+        
+        print("Wants to filter images by \(query)")
+        guard let textEncoder = await textEncoder, let imageIndex = await imageIndex else {
+            return []
         }
         
         do {
             // Get the embedding for the query.
-            let queryEmbedding = try textModel.forward(with: query).asFloats()
+            let queryEmbedding = try textEncoder.forward(with: query).asFloats()
+            let results = imageIndex.search(vector: queryEmbedding, count: 100)
             
             // Calculate the cosine similarity of each image's embedding to the query's embedding.
-            let similarityScores = await matrix.enumerated().concurrentMap { (index, imageEmbedding) -> (String, Float) in
-                let imageName = allImageNames[index]
-                return (imageName, vDSP.cosineSimilarity(lhs: queryEmbedding, rhs: imageEmbedding))
+            let similarityScores = zip(results.0, results.1).map { (key: USearchKey, similarity: Float32) in
+                let imageName = allImageNames[Int(key)]
+                return (imageName, similarity)
             }
             
             // Sort the images by descending similarity scores.
@@ -106,13 +118,13 @@ class ImageModel: ObservableObject {
             
         } catch {
             print("Error processing embeddings: \(error)")
-            return allImageNames
+            return []
         }
     }
     
     func loadMatrix() {
         
-        guard let filePath = Bundle.main.resourcePath?.appending("/images.uform-vl-english-small.fbin") else {
+        guard let filePath = Bundle.main.resourcePath?.appending("/images.uform3-image-text-english-small.fbin") else {
             print("Matrix file not found.")
             return
         }
@@ -148,80 +160,45 @@ class ImageModel: ObservableObject {
     }
     
     @MainActor
-    func loadTextModel() async {
+    func loadTextEncoder() async {
         do {
-            let api = HubApi(hfToken: "")
-            textModel = try await TextEncoder(
-                modelName: "unum-cloud/uform3-image-text-english-small",
-                hubApi: api
-            )
+            textEncoder = try await TextEncoder(modelName: "unum-cloud/uform3-image-text-english-small")
         } catch {
             print("Error initializing TextEncoder: \(error)")
         }
     }
-}
 
-// MARK: - Internal
-
-extension Sequence {
-    public func concurrentMap<T: Sendable>(
-        priority: TaskPriority? = nil,
-        @_implicitSelfCapture _ transform: @Sendable @escaping (Element) async throws -> T
-    ) async rethrows -> [T] {
-        try await withThrowingTaskGroup(of: (Int, T).self) { group in
-            enumerated().forEach { element in
-                group.addTask(priority: priority) {
-                    let result = try await transform(element.1)
-                    
-                    return (element.0, result)
-                }
-            }
-            
-            let initialCapacity = underestimatedCount
-            
-            var result = ContiguousArray<(Int, T)>()
-            
-            result.reserveCapacity(initialCapacity)
-            
-            for _ in 0..<initialCapacity {
-                try await result.append(group.next()!)
-            }
-            
-            while let element = try await group.next() {
-                result.append(element)
-            }
-            
-            try await group.waitForAll()
-            
-            return result.sorted(by: { $0.0 < $1.0 }).map({ $0.1 })
+    @MainActor
+    func loadImageEncoder() async {
+        do {
+            statusMessage = "Loading image encoder..."
+            imageEncoder = try await ImageEncoder(modelName: "unum-cloud/uform3-image-text-english-small")
+        } catch {
+            print("Error initializing ImageEncoder: \(error)")
         }
-    }
-}
-
-extension vDSP {
-    @inlinable
-    public static func cosineSimilarity<U: AccelerateBuffer>(
-        lhs: U,
-        rhs: U
-    ) -> Double where U.Element == Double {
-        let dotProduct = vDSP.dot(lhs, rhs)
-        
-        let lhsMagnitude = vDSP.sumOfSquares(lhs).squareRoot()
-        let rhsMagnitude = vDSP.sumOfSquares(rhs).squareRoot()
-        
-        return dotProduct / (lhsMagnitude * rhsMagnitude)
+        statusMessage = ""
     }
     
-    @inlinable
-    public static func cosineSimilarity<U: AccelerateBuffer>(
-        lhs: U,
-        rhs: U
-    ) -> Float where U.Element == Float {
-        let dotProduct = vDSP.dot(lhs, rhs)
-        
-        let lhsMagnitude = vDSP.sumOfSquares(lhs).squareRoot()
-        let rhsMagnitude = vDSP.sumOfSquares(rhs).squareRoot()
-        
-        return dotProduct / (lhsMagnitude * rhsMagnitude)
+    @MainActor
+    func indexImages() async {
+        do {
+            imageIndex = USearchIndex.make(metric: .cos, dimensions: columns, connectivity: 0, quantization: .F16)
+            let _ = imageIndex!.reserve(rows)
+            for row in 0..<Int(rows) {
+                let _ = imageIndex!.add(key: UInt64(row), vector: matrix![row])
+            }
+        } catch {
+            print("Error initializing USearchIndex: \(error)")
+        }
+    }
+    
+    @MainActor
+    func loadEncodersAndIndex() async {
+        async let loadText: () = loadTextEncoder()
+        async let loadImage: () = loadImageEncoder()
+        async let index: () = indexImages()
+
+        // Await all tasks here, they run concurrently
+        _ = await (loadText, loadImage, index)
     }
 }

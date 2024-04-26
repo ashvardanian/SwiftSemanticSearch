@@ -7,20 +7,18 @@
 
 import Accelerate
 import SwiftUI
-import USearch
-import UForm
-import Hub
 
 @main
 struct SwiftSemanticSearchApp: App {
-    @StateObject var imageModel = ImageModel()
-
+    @StateObject var searchModel = SearchModel()
+    
     var body: some Scene {
         WindowGroup {
+
             ContentView()
-                .environmentObject(imageModel)
+                .environmentObject(searchModel)
                 .task {
-                    await imageModel.loadTextModel()
+                    await searchModel.loadEncodersAndIndex()
                 }
         }
     }
