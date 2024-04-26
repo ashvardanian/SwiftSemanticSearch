@@ -18,7 +18,7 @@ struct SwiftSemanticSearchApp: App {
             ContentView()
                 .environmentObject(searchModel)
                 .task {
-                    await searchModel.loadEncodersAndIndex()
+                    await searchModel.loadEncodersAndIndexConcurrently()
                 }
         }
     }

@@ -9,26 +9,61 @@ import SwiftUI
 import UForm
 import USearch
 
-@globalActor
-final public actor SearchActor: GlobalActor {
-    static public var shared = SearchActor()
+// Define separate actors for encapsulating each resource, that can operate concurrently
+actor TextEncoderActor {
+    var textEncoder: TextEncoder?
+
+    func load() async throws {
+        self.textEncoder = try await TextEncoder(modelName: "unum-cloud/uform3-image-text-english-small")
+    }
+}
+
+actor ImageEncoderActor {
+    var imageEncoder: ImageEncoder?
+
+    func load() async throws {
+        self.imageEncoder = try await ImageEncoder(modelName: "unum-cloud/uform3-image-text-english-small")
+    }
+}
+
+actor ImageIndexActor {
+    var imageIndex: USearchIndex?
+
+    func index(matrix: [[Float]], rows: UInt32, columns: UInt32) async throws {
+        imageIndex = USearchIndex.make(metric: .cos, dimensions: columns, connectivity: 0, quantization: .F16)
+        let _ = imageIndex!.reserve(rows)
+        for row in 0..<Int(rows) {
+            let _ = imageIndex!.add(key: UInt64(row), vector: matrix[row])
+        }
+    }
 }
 
 class SearchModel: ObservableObject {
 
-    @Published var allImageNames: [String] = []
-    @Published var statusMessage = ""
+    /// We are ready to show the grid as soon as the list of image names is loaded into memory.
+    /// This shouldn't take long even for 10s of thousands of images.
+    @Published
+    @MainActor
+    var readyToShow: Bool = false
 
+    /// We are ready to search as soon as both the image encoder and the text encoder are
+    /// loaded into memory, and as the index construction/loading is completed.
+    @Published
     @MainActor
-    @Published var textEncoder: TextEncoder?
-    @MainActor
-    @Published var imageEncoder: ImageEncoder?
-    @MainActor
-    @Published var imageIndex: USearchIndex?
+    var readyToSearch: Bool = false
+    
+    private var allImageNames: [String] = []
+    private var textEncoder: TextEncoder?
+    private var imageEncoder: ImageEncoder?
+    private var imageIndex: USearchIndex?
 
-    var rows: UInt32 = 0
-    var columns: UInt32 = 0
-    var matrix: [[Float]]?
+    private let textEncoderActor = TextEncoderActor()
+    private let imageEncoderActor = ImageEncoderActor()
+    private let imageIndexActor = ImageIndexActor()
+
+    private var rows: UInt32 = 0
+    private var columns: UInt32 = 0
+    private var matrix: [[Float]]?
     
     init() {
         allImageNames = loadImageNames()
@@ -85,43 +120,7 @@ class SearchModel: ObservableObject {
             print("Missing files: \(missingFiles)")
         }
     }
-    
-    @SearchActor
-    func filteredAndSortedImages(
-        query: String
-    ) async throws -> [String] {
         
-        if query.isEmpty {
-            return allImageNames
-        }
-        
-        print("Wants to filter images by \(query)")
-        guard let textEncoder = await textEncoder, let imageIndex = await imageIndex else {
-            return []
-        }
-        
-        do {
-            // Get the embedding for the query.
-            let queryEmbedding = try textEncoder.forward(with: query).asFloats()
-            let results = imageIndex.search(vector: queryEmbedding, count: 100)
-            
-            // Calculate the cosine similarity of each image's embedding to the query's embedding.
-            let similarityScores = zip(results.0, results.1).map { (key: USearchKey, similarity: Float32) in
-                let imageName = allImageNames[Int(key)]
-                return (imageName, similarity)
-            }
-            
-            // Sort the images by descending similarity scores.
-            return similarityScores
-                .sorted { $0.1 > $1.1 }
-                .map { $0.0 }
-            
-        } catch {
-            print("Error processing embeddings: \(error)")
-            return []
-        }
-    }
-    
     func loadMatrix() {
         
         guard let filePath = Bundle.main.resourcePath?.appending("/images.uform3-image-text-english-small.fbin") else {
@@ -159,46 +158,105 @@ class SearchModel: ObservableObject {
         }
     }
     
-    @MainActor
-    func loadTextEncoder() async {
-        do {
-            textEncoder = try await TextEncoder(modelName: "unum-cloud/uform3-image-text-english-small")
-        } catch {
-            print("Error initializing TextEncoder: \(error)")
+    func loadEncodersAndIndexConcurrently() async {
+        await MainActor.run {
+            readyToShow = true
         }
-    }
+        
+        do {
+            // Start all loading operations concurrently
+            async let textEncoderLoad: () = try textEncoderActor.load()
+            async let imageEncoderLoad: () = try imageEncoderActor.load()
+            async let imageIndexLoad: () = try imageIndexActor.index(matrix: self.matrix!, rows: self.rows, columns: self.columns)
 
-    @MainActor
-    func loadImageEncoder() async {
-        do {
-            statusMessage = "Loading image encoder..."
-            imageEncoder = try await ImageEncoder(modelName: "unum-cloud/uform3-image-text-english-small")
-        } catch {
-            print("Error initializing ImageEncoder: \(error)")
-        }
-        statusMessage = ""
-    }
-    
-    @MainActor
-    func indexImages() async {
-        do {
-            imageIndex = USearchIndex.make(metric: .cos, dimensions: columns, connectivity: 0, quantization: .F16)
-            let _ = imageIndex!.reserve(rows)
-            for row in 0..<Int(rows) {
-                let _ = imageIndex!.add(key: UInt64(row), vector: matrix![row])
+            // Await all tasks here; they run independently
+            try await textEncoderLoad
+            try await imageEncoderLoad
+            try await imageIndexLoad
+
+            // Assign loaded resources back to @Published properties for UI updates
+            self.textEncoder = await textEncoderActor.textEncoder
+            self.imageEncoder = await imageEncoderActor.imageEncoder
+            self.imageIndex = await imageIndexActor.imageIndex
+            await MainActor.run {
+                self.readyToSearch = true
             }
         } catch {
-            print("Error initializing USearchIndex: \(error)")
+            // Handle errors, possibly by updating a status message or similar
+            print("Error in concurrent initialization: \(error)")
         }
     }
     
-    @MainActor
-    func loadEncodersAndIndex() async {
-        async let loadText: () = loadTextEncoder()
-        async let loadImage: () = loadImageEncoder()
-        async let index: () = indexImages()
-
-        // Await all tasks here, they run concurrently
-        _ = await (loadText, loadImage, index)
+    func filter(withText query: String) async throws -> [String] {
+        
+        if query.isEmpty {
+            return allImageNames
+        }
+        
+        print("Wants to filter images by \(query)")
+        
+        // This is a simple way to yield execution to allow other tasks to complete.
+        while !(await readyToSearch) {
+            await Task.yield()
+        }
+        
+        guard let textEncoder = textEncoder, let imageIndex = imageIndex else {
+            return []
+        }
+        
+        do {
+            // Get the embedding for the query.
+            let queryEmbedding = try textEncoder.encode(query).asFloats()
+            let results = imageIndex.search(vector: queryEmbedding, count: 100)
+            
+            // Calculate the cosine similarity of each image's embedding to the query's embedding.
+            let similarityScores = zip(results.0, results.1).map { (key: USearchKey, similarity: Float32) in
+                let imageName = allImageNames[Int(key)]
+                return (imageName, similarity)
+            }
+            
+            // Sort the images by descending similarity scores.
+            return similarityScores
+                .sorted { $0.1 < $1.1 }
+                .map { $0.0 }
+            
+        } catch {
+            print("Error processing embeddings: \(error)")
+            return []
+        }
     }
+
+    func filter(withImage query: CGImage) async throws -> [String] {
+        
+        // This is a simple way to yield execution to allow other tasks to complete.
+        while !(await readyToSearch) {
+            await Task.yield()
+        }
+        
+        guard let imageEncoder = imageEncoder, let imageIndex = imageIndex else {
+            return []
+        }
+        
+        do {
+            // Get the embedding for the query.
+            let queryEmbedding = try imageEncoder.encode(query).asFloats()
+            let results = imageIndex.search(vector: queryEmbedding, count: 100)
+            
+            // Calculate the cosine similarity of each image's embedding to the query's embedding.
+            let similarityScores = zip(results.0, results.1).map { (key: USearchKey, similarity: Float32) in
+                let imageName = allImageNames[Int(key)]
+                return (imageName, similarity)
+            }
+            
+            // Sort the images by descending similarity scores.
+            return similarityScores
+                .sorted { $0.1 < $1.1 }
+                .map { $0.0 }
+            
+        } catch {
+            print("Error processing embeddings: \(error)")
+            return []
+        }
+    }
+
 }
