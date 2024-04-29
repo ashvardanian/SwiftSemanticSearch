@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		46B4675C2BD707EF009D6420 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 46B4675B2BD707EF009D6420 /* SwiftUIX */; };
+		463083282BDCAA2B006A644E /* Media in Frameworks */ = {isa = PBXBuildFile; productRef = 463083272BDCAA2B006A644E /* Media */; };
 		46B4675E2BD70804009D6420 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B4675D2BD70804009D6420 /* SearchModel.swift */; };
-		A208E9DC2BCB3A20005F91B5 /* SwiftSemanticSearchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A208E9DB2BCB3A20005F91B5 /* SwiftSemanticSearchApp.swift */; };
+		A208E9DC2BCB3A20005F91B5 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = A208E9DB2BCB3A20005F91B5 /* App.swift */; };
 		A208E9DE2BCB3A20005F91B5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A208E9DD2BCB3A20005F91B5 /* ContentView.swift */; };
 		A208E9E02BCB3A21005F91B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A208E9DF2BCB3A21005F91B5 /* Assets.xcassets */; };
 		A208E9E32BCB3A21005F91B5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A208E9E22BCB3A21005F91B5 /* Preview Assets.xcassets */; };
@@ -21,9 +21,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		46120B1C2BDFD962007746C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		46B4675D2BD70804009D6420 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		A208E9D82BCB3A20005F91B5 /* SwiftSemanticSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftSemanticSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A208E9DB2BCB3A20005F91B5 /* SwiftSemanticSearchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSemanticSearchApp.swift; sourceTree = "<group>"; };
+		A208E9DB2BCB3A20005F91B5 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		A208E9DD2BCB3A20005F91B5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A208E9DF2BCB3A21005F91B5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A208E9E22BCB3A21005F91B5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -37,7 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				46B4675C2BD707EF009D6420 /* SwiftUIX in Frameworks */,
+				463083282BDCAA2B006A644E /* Media in Frameworks */,
 				A297E7C42BD6FFCA00C478C2 /* UForm in Frameworks */,
 				A2EABA722BCB50CE00CB4341 /* USearch in Frameworks */,
 			);
@@ -69,9 +70,10 @@
 		A208E9DA2BCB3A20005F91B5 /* SwiftSemanticSearch */ = {
 			isa = PBXGroup;
 			children = (
+				46120B1C2BDFD962007746C2 /* Info.plist */,
 				A208E9DD2BCB3A20005F91B5 /* ContentView.swift */,
 				46B4675D2BD70804009D6420 /* SearchModel.swift */,
-				A208E9DB2BCB3A20005F91B5 /* SwiftSemanticSearchApp.swift */,
+				A208E9DB2BCB3A20005F91B5 /* App.swift */,
 				A208E9DF2BCB3A21005F91B5 /* Assets.xcassets */,
 				A208E9E12BCB3A21005F91B5 /* Preview Content */,
 			);
@@ -112,7 +114,7 @@
 			packageProductDependencies = (
 				A2EABA712BCB50CE00CB4341 /* USearch */,
 				A297E7C32BD6FFCA00C478C2 /* UForm */,
-				46B4675B2BD707EF009D6420 /* SwiftUIX */,
+				463083272BDCAA2B006A644E /* Media */,
 			);
 			productName = SwiftSemanticSearch;
 			productReference = A208E9D82BCB3A20005F91B5 /* SwiftSemanticSearch.app */;
@@ -146,6 +148,7 @@
 				A2EABA702BCB50CE00CB4341 /* XCRemoteSwiftPackageReference "usearch" */,
 				A297E7C22BD6FFCA00C478C2 /* XCRemoteSwiftPackageReference "uform" */,
 				46B4675A2BD707EF009D6420 /* XCRemoteSwiftPackageReference "SwiftUIX" */,
+				463083262BDCAA2B006A644E /* XCRemoteSwiftPackageReference "Media" */,
 			);
 			productRefGroup = A208E9D92BCB3A20005F91B5 /* Products */;
 			projectDirPath = "";
@@ -178,7 +181,7 @@
 			files = (
 				A208E9DE2BCB3A20005F91B5 /* ContentView.swift in Sources */,
 				46B4675E2BD70804009D6420 /* SearchModel.swift in Sources */,
-				A208E9DC2BCB3A20005F91B5 /* SwiftSemanticSearchApp.swift in Sources */,
+				A208E9DC2BCB3A20005F91B5 /* App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,7 +192,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				APP_SHORTCUTS_ENABLE_FLEXIBLE_MATCHING = NO;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOL_FRAMEWORKS = "";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -252,7 +258,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				APP_SHORTCUTS_ENABLE_FLEXIBLE_MATCHING = NO;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOL_FRAMEWORKS = "";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -312,11 +321,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftSemanticSearch/Preview Content\"";
-				DEVELOPMENT_TEAM = 4J62EE2G74;
+				DEVELOPMENT_TEAM = 4PWQ7VFGWM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SwiftSemanticSearch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Swift Semantic Search";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera usage.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -343,11 +354,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftSemanticSearch/Preview Content\"";
-				DEVELOPMENT_TEAM = 4J62EE2G74;
+				DEVELOPMENT_TEAM = 4PWQ7VFGWM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SwiftSemanticSearch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Swift Semantic Search";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera usage.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -390,20 +403,28 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		463083262BDCAA2B006A644E /* XCRemoteSwiftPackageReference "Media" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vmanot/Media.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		46B4675A2BD707EF009D6420 /* XCRemoteSwiftPackageReference "SwiftUIX" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.9;
+				branch = master;
+				kind = branch;
 			};
 		};
 		A297E7C22BD6FFCA00C478C2 /* XCRemoteSwiftPackageReference "uform" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ashvardanian/uform/";
 			requirement = {
-				kind = revision;
-				revision = ffca7f6dcaa6fbbf266f7e705a47530aa1691658;
+				branch = main;
+				kind = branch;
 			};
 		};
 		A2EABA702BCB50CE00CB4341 /* XCRemoteSwiftPackageReference "usearch" */ = {
@@ -417,10 +438,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		46B4675B2BD707EF009D6420 /* SwiftUIX */ = {
+		463083272BDCAA2B006A644E /* Media */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 46B4675A2BD707EF009D6420 /* XCRemoteSwiftPackageReference "SwiftUIX" */;
-			productName = SwiftUIX;
+			package = 463083262BDCAA2B006A644E /* XCRemoteSwiftPackageReference "Media" */;
+			productName = Media;
 		};
 		A297E7C32BD6FFCA00C478C2 /* UForm */ = {
 			isa = XCSwiftPackageProductDependency;

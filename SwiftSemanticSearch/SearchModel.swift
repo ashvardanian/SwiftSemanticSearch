@@ -5,71 +5,43 @@
 import Accelerate
 import Combine
 import SwiftUI
-
 import UForm
 import USearch
 
-// Define separate actors for encapsulating each resource, that can operate concurrently
-actor TextEncoderActor {
-    var textEncoder: TextEncoder?
-
-    func load() async throws {
-        self.textEncoder = try await TextEncoder(modelName: "unum-cloud/uform3-image-text-english-small")
-    }
-}
-
-actor ImageEncoderActor {
-    var imageEncoder: ImageEncoder?
-
-    func load() async throws {
-        self.imageEncoder = try await ImageEncoder(modelName: "unum-cloud/uform3-image-text-english-small")
-    }
-}
-
-actor ImageIndexActor {
-    var imageIndex: USearchIndex?
-
-    func index(matrix: [[Float]], rows: UInt32, columns: UInt32) async throws {
-        imageIndex = USearchIndex.make(metric: .cos, dimensions: columns, connectivity: 0, quantization: .F16)
-        let _ = imageIndex!.reserve(rows)
-        for row in 0..<Int(rows) {
-            let _ = imageIndex!.add(key: UInt64(row), vector: matrix[row])
-        }
-    }
-}
-
 class SearchModel: ObservableObject {
-
-    /// We are ready to show the grid as soon as the list of image names is loaded into memory.
-    /// This shouldn't take long even for 10s of thousands of images.
-    @Published
     @MainActor
-    var readyToShow: Bool = false
-
-    /// We are ready to search as soon as both the image encoder and the text encoder are
-    /// loaded into memory, and as the index construction/loading is completed.
-    @Published
-    @MainActor
-    var readyToSearch: Bool = false
+    public enum StateFlag {
+        case readyToShow
+        case readyToSearch
+    }
     
+    @Published
+    public var state: Set<StateFlag> = []
+    
+    private var _loadEncodersAndIndexConcurrentlyTask: Task<Void, Error>? = nil
     private var allImageNames: [String] = []
     private var textEncoder: TextEncoder?
     private var imageEncoder: ImageEncoder?
-    private var imageIndex: USearchIndex?
-
-    private let textEncoderActor = TextEncoderActor()
-    private let imageEncoderActor = ImageEncoderActor()
-    private let imageIndexActor = ImageIndexActor()
-
+    
+    fileprivate var imageIndex: USearchIndex?
+    
+    private lazy var textEncoderActor = TextEncoderActor()
+    private lazy var imageEncoderActor = ImageEncoderActor()
+    private lazy var imageIndexActor = ImageIndexActor(searchModel: self)
+    
     private var rows: UInt32 = 0
     private var columns: UInt32 = 0
-    private var matrix: [[Float]]?
+    private var matrix: [Float] = []
     
     init() {
         allImageNames = loadImageNames()
         let persistedImageFilename = listFilesInImagesFolder()
         checkForMissingImages(imageNames: allImageNames, imageFiles: persistedImageFilename)
         loadMatrix()
+        
+        Task.detached(priority: .userInitiated) {
+            await self.loadEncodersAndIndexConcurrently()
+        }
     }
     
     func loadImageNames() -> [String] {
@@ -120,7 +92,7 @@ class SearchModel: ObservableObject {
             print("Missing files: \(missingFiles)")
         }
     }
-        
+    
     func loadMatrix() {
         
         guard let filePath = Bundle.main.resourcePath?.appending("/images.uform3-image-text-english-small.fbin") else {
@@ -141,16 +113,11 @@ class SearchModel: ObservableObject {
                 columns = columnsPointer.pointee
                 offset += MemoryLayout<UInt32>.size
                 
-                // Now that we know the size of the matrix, allocate it
-                matrix = Array(repeating: Array(repeating: 0, count: Int(columns)), count: Int(rows))
+                let rawMatrix = UnsafeBufferPointer<Float>(start: bytes.baseAddress!.advanced(by: offset).assumingMemoryBound(to: Float.self), count: rows * columns)
                 
-                // Extract matrix data
-                let floatPointer = bytes.baseAddress!.advanced(by: offset).assumingMemoryBound(to: Float.self)
-                for row in 0..<Int(rows) {
-                    for col in 0..<Int(columns) {
-                        matrix![row][col] = floatPointer[row * Int(columns) + col]
-                    }
-                }
+                // Now that we know the size of the matrix, allocate it
+                matrix = Array(rawMatrix)
+                
                 print("Loaded a \(rows) x \(columns) matrix")
             }
         } catch {
@@ -158,32 +125,41 @@ class SearchModel: ObservableObject {
         }
     }
     
+    @MainActor
     func loadEncodersAndIndexConcurrently() async {
-        await MainActor.run {
-            readyToShow = true
-        }
-        
         do {
-            // Start all loading operations concurrently
-            async let textEncoderLoad: () = try textEncoderActor.load()
-            async let imageEncoderLoad: () = try imageEncoderActor.load()
-            async let imageIndexLoad: () = try imageIndexActor.index(matrix: self.matrix!, rows: self.rows, columns: self.columns)
-
-            // Await all tasks here; they run independently
-            try await textEncoderLoad
-            try await imageEncoderLoad
-            try await imageIndexLoad
-
-            // Assign loaded resources back to @Published properties for UI updates
-            self.textEncoder = await textEncoderActor.textEncoder
-            self.imageEncoder = await imageEncoderActor.imageEncoder
-            self.imageIndex = await imageIndexActor.imageIndex
-            await MainActor.run {
-                self.readyToSearch = true
+            _ = state.insert(.readyToShow)
+            
+            _loadEncodersAndIndexConcurrentlyTask = Task.detached(priority: .userInitiated) {
+                try await withThrowingTaskGroup(of: Void.self) { group in
+                    group.addTask(priority: .userInitiated) {
+                        try await self.textEncoderActor.load()
+                    }
+                    
+                    group.addTask(priority: .userInitiated) {
+                        try await self.imageEncoderActor.load()
+                    }
+                    
+                    group.addTask(priority: .userInitiated) {
+                        try await self.imageIndexActor.index(
+                            matrix: self.matrix,
+                            rows: self.rows,
+                            columns: self.columns
+                        )
+                    }
+                    
+                    try await group.waitForAll()
+                }
             }
+            
+            try await _loadEncodersAndIndexConcurrentlyTask?.value
+            
+            self.textEncoder = await self.textEncoderActor.textEncoder
+            self.imageEncoder = await self.imageEncoderActor.imageEncoder
+            
+            _ = state.insert(.readyToSearch)
         } catch {
-            // Handle errors, possibly by updating a status message or similar
-            print("Error in concurrent initialization: \(error)")
+            assertionFailure(String(describing: error))
         }
     }
     
@@ -195,10 +171,6 @@ class SearchModel: ObservableObject {
         
         print("Wants to filter images by \(query)")
         
-        // This is a simple way to yield execution to allow other tasks to complete.
-        while !(await readyToSearch) {
-            await Task.yield()
-        }
         
         guard let textEncoder = textEncoder, let imageIndex = imageIndex else {
             return []
@@ -225,13 +197,14 @@ class SearchModel: ObservableObject {
             return []
         }
     }
+}
 
-    func filter(withImage query: CGImage) async throws -> [String] {
-        
-        // This is a simple way to yield execution to allow other tasks to complete.
-        while !(await readyToSearch) {
-            await Task.yield()
-        }
+extension SearchModel {
+    @MainActor
+    func filter(
+        withImage query: CGImage
+    ) async throws -> [String] {
+        try await _loadEncodersAndIndexConcurrentlyTask?.value
         
         guard let imageEncoder = imageEncoder, let imageIndex = imageIndex else {
             return []
@@ -258,5 +231,85 @@ class SearchModel: ObservableObject {
             return []
         }
     }
+}
 
+// MARK: - Auxiliary
+
+// Define separate actors for encapsulating each resource, that can operate concurrently
+actor TextEncoderActor {
+    var textEncoder: TextEncoder?
+    
+    func load() async throws {
+        self.textEncoder = try await TextEncoder(modelName: "unum-cloud/uform3-image-text-english-small")
+    }
+}
+
+actor ImageEncoderActor {
+    var imageEncoder: ImageEncoder?
+    
+    func load() async throws {
+        self.imageEncoder = try await ImageEncoder(modelName: "unum-cloud/uform3-image-text-english-small")
+    }
+}
+
+actor ImageIndexActor {
+    private var searchModel: SearchModel
+    
+    init(searchModel: SearchModel) {
+        self.searchModel = searchModel
+    }
+    
+    @usableFromInline
+    func index(
+        matrix: [Float],
+        rows: UInt32,
+        columns: UInt32
+    ) async throws {
+        let indexURL = URL.documentsDirectory.appending("appindex.usearch")
+        
+        let imageIndex = USearchIndex.make(
+            metric: .cos,
+            dimensions: columns,
+            connectivity: 0,
+            quantization: .F32
+        )
+        
+        if FileManager.default.fileExists(at: indexURL) {
+            imageIndex.load(path: indexURL.path())
+        } else {
+            let _ = imageIndex.reserve(rows)
+            
+            let columns = Int(columns)
+            
+            await (0..<Int(rows)).concurrentForEach { (row: Int) in
+                let range: Range<Int> = Int(row * columns)..<Int((row + 1) * columns)
+                
+                let _ = imageIndex.add(key: UInt64(row), vector: matrix[range])
+            }
+            
+            imageIndex.save(path: indexURL.path())
+        }
+        
+        searchModel.imageIndex = imageIndex
+    }
+}
+
+// MARK: - Helpers
+
+extension Sequence {
+    @_transparent
+    @_specialize(where Self == Range<Int>, Element == Int)
+    public func concurrentForEach(
+        @_implicitSelfCapture _ operation: @escaping @Sendable (Element) async -> Void
+    ) async {
+        await withTaskGroup(of: Void.self) { group in
+            for element in self {
+                group.addTask {
+                    await operation(element)
+                }
+            }
+            
+            await group.waitForAll()
+        }
+    }
 }
