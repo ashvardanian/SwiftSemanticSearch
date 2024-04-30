@@ -1,11 +1,7 @@
 //
-//  SwiftSemanticSearchApp.swift
-//  SwiftSemanticSearch
-//
-//  Created by Ash Vardanian on 4/13/24.
+// Copyright (c) Ash Vardanian
 //
 
-import Accelerate
 import SwiftUI
 
 @main
@@ -18,7 +14,9 @@ struct SwiftSemanticSearchApp: App {
             ContentView()
                 .environmentObject(searchModel)
                 .task {
-                    await searchModel.loadEncodersAndIndexConcurrently()
+                    Task.detached(priority: .userInitiated) {
+                        await searchModel.loadEncodersAndIndexConcurrently()
+                    }
                 }
         }
     }

@@ -1,16 +1,11 @@
 //
-//  ContentView.swift
-//  SwiftSemanticSearch
+// Copyright (c) Ash Vardanian
 //
-//  Created by Ash Vardanian on 4/13/24.
-//
-
-import SwiftUI
 
 import Media // For camera - https://github.com/vmanot/Media
 import SwiftUIX // For debounce - https://github.com/vmanot/SwiftUIX
 
-enum SearchMode {
+enum SearchMode: String, CaseIterable, Codable, Hashable, Sendable {
     case text, videoStream, image
 }
 
@@ -19,18 +14,18 @@ struct ContentView: View {
     @State private var searchText: String = ""
     @State private var searchImage: UIImage? = nil
     @State private var searchMode: SearchMode = .text
-
     /// The asynchronous function to be executed in the background
     @State private var searchTask: Task<Void, Error>?
-    
     /// Paths (or names) of images matching the current search query
     @State private var filteredData: [String] = []
-
+    
     var body: some View {
         NavigationView {
-            VStack {
+            VStack(spacing: 0) {
                 contentForCurrentMode
+                    .clipped()
                 searchResultsView
+                    .clipped()
             }
             .navigationBarTitle("Unum ❤️ Apple", displayMode: .inline)
             .toolbar {
@@ -40,15 +35,27 @@ struct ContentView: View {
                 showAll()
             }
         }
+        .navigationViewStyle(.stack)
     }
-
+    
     @ViewBuilder
     private var contentForCurrentMode: some View {
         switch searchMode {
-        case .text:
-            textFieldView
-        case .videoStream, .image:
-            squareContent
+            case .text:
+                textFieldView
+            case .videoStream, .image:
+                MediaInputView(
+                    searchMode: searchMode,
+                    onImageCapture: { image in
+                        showSimilar(toImage: image)
+                    },
+                    searchImage: searchImage,
+                    onImageTap: {
+                        showAll()
+                        
+                        searchMode = .text
+                    }
+                )
         }
     }
     
@@ -59,46 +66,6 @@ struct ContentView: View {
             .alignmentGuide(HorizontalAlignment.center)
     }
 
-    @ViewBuilder
-    private var squareContent: some View {
-        GeometryReader { geo in
-            let size = min(geo.size.width, geo.size.height)
-            switch searchMode {
-            case .videoStream:
-                cameraView(size: size)
-            case .image:
-                imageView(size: size)
-            default:
-                EmptyView()
-            }
-        }
-    }
-
-    private func cameraView(size: CGFloat) -> some View {
-        CameraViewReader { (cameraProxy: CameraViewProxy) in
-            CameraView(camera: .back, mirrored: false)
-                .frame(width: size, height: size)
-                .safeAreaInset(edge: .bottom) {
-                    captureButton(camera: cameraProxy) { image in
-                        showSimilar(toImage: image)
-                    }
-                }
-        }
-    }
-
-    private func imageView(size: CGFloat) -> some View {
-        Image(uiImage: searchImage!)
-            .resizable()
-            .frame(width: size, height: size, alignment: .center) // Set the frame size and center the image
-            .scaledToFill() // This will ensure the image scales down to fit within the view without stretching
-            .background(Color.clear) // Use a clear background, so it doesn't affect the image view
-            .contentShape(Rectangle()) // Make sure the tap gesture is recognized in the whole square area
-            .onTapGesture {
-                showAll()
-                searchMode = .text
-            }
-    }
-
     private var searchModeToolbar: some ToolbarContent {
         Group {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -106,63 +73,34 @@ struct ContentView: View {
                     Image(systemName: iconForCurrentMode)
                 }
             }
+            
             ToolbarItem(placement: .navigationBarLeading) {
-                if !searchModel.readyToShow || !searchModel.readyToSearch {
-                    ProgressView().progressViewStyle(.circular)
-                }
+                progressIndicator
             }
         }
     }
-
-
-    private func toggleSearchMode() {
-        switch searchMode {
-        case .text:
-            searchMode = .videoStream
-        case .videoStream, .image:
-            searchMode = .text
+    
+    @ViewBuilder
+    private var progressIndicator: some View {
+        if !searchModel.state.isSuperset(of: [.readyToSearch, .readyToShow]) {
+            ProgressView().progressViewStyle(.circular)
         }
-        showAll()
     }
-
+    
     private var iconForCurrentMode: String {
         switch searchMode {
-        case .text: return "camera"
-        case .videoStream: return "photo"
-        case .image: return "text.bubble"
+            case .text: return "camera"
+            case .videoStream: return "photo"
+            case .image: return "text.bubble"
         }
     }
-
     
     private var searchResultsView: some View {
-        GeometryReader { geometry in
-            let imageOptimalWidth = 250.0
-            let minColumns = 3
-            
-            // Dynamically calculate the number of columns based on the available width,
-            // so that the images are displayed in a grid layout without any empty space
-            let numberOfColumns = Int(max(minColumns, Int(geometry.size.width / imageOptimalWidth)))
-            let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: numberOfColumns)
-            let width = geometry.size.width / CGFloat(numberOfColumns)
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: 0) {
-                    ForEach(filteredData, id: \.self) { imageName in
-                        if let imagePath = Bundle.main.path(forResource: imageName, ofType: nil, inDirectory: "images"),
-                           let image = UIImage(contentsOfFile: imagePath) {
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: width, height: width)
-                                .onTapGesture {
-                                    showSimilar(toImage: image)
-                                    searchMode = .image
-                                }
-                        }
-                    }
-                    
-                }
-                
-            }
+        GeometryReader(alignment: .center) { geometry in
+            SearchResultsView(geometry: geometry, data: filteredData, onTap: { image in
+                showSimilar(toImage: image)
+                searchMode = .image
+            })
         }
         .withChangePublisher(for: searchText) { publisher in
             publisher
@@ -171,30 +109,25 @@ struct ContentView: View {
                     self.filteredData = []
                 })
                 .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
-                .sink { showSimilar(toText: $0) }
+                .sink { searchText in
+                    withAnimation(.default) {
+                        showSimilar(toText: searchText)
+                    }
+                }
         }
     }
-    
-    @ViewBuilder
-    private func captureButton(camera: CameraViewProxy, onCapture: @escaping (UIImage) -> Void) -> some View {
-        Button {
-            Task { @MainActor in
-                let image: UIImage = try! await camera.capturePhoto()
-                onCapture(image)
-            }
-        } label: {
-            Label {
-                Text("Capture Photo")
-            } icon: {
-                Image(systemName: .cameraFill)
-            }
-            .font(.title2)
-            .controlSize(.large)
-            .padding(.small)
+}
+
+extension ContentView {
+    private func toggleSearchMode() {
+        switch searchMode {
+            case .text:
+                searchMode = .videoStream
+            case .videoStream, .image:
+                searchMode = .text
         }
-        .buttonStyle(.borderedProminent)
+        showAll()
     }
-    
     
     private func showAll() {
         showSimilar()
@@ -210,19 +143,145 @@ struct ContentView: View {
         }
     }
     
+    @MainActor
     private func showSimilar(toImage image: UIImage) {
         guard let cgImage = image.cgImage else {
             // Handle the error: no CGImage found
             print("No CGImage available in the UIImage")
             return
         }
+        
         searchTask?.cancel()
         searchImage = image
-        searchTask = Task.detached(priority: .userInitiated) {
+        searchTask = Task.detached(priority: .high) {
             let result = try await searchModel.filter(withImage: cgImage)
+            
             try Task.checkCancellation()
+            
             await MainActor.run {
                 self.filteredData = result
+            }
+        }
+    }
+}
+
+extension ContentView {
+    fileprivate struct MediaInputView: View {
+        let searchMode: SearchMode
+        let onImageCapture: (AppKitOrUIKitImage) -> Void
+        let searchImage: AppKitOrUIKitImage?
+        let onImageTap: () -> Void
+        
+        @State private var autoCapture: Bool = true
+        
+        var body: some View {
+            GeometryReader(alignment: .center) { geo in
+                let size = min(geo.size.width, geo.size.height)
+                switch searchMode {
+                    case .videoStream:
+                        makeCameraView(size: size)
+                    case .image:
+                        makeImageView(size: size)
+                    default:
+                        EmptyView()
+                }
+            }
+        }
+        
+        private func makeCameraView(size: CGFloat) -> some View {
+            CameraViewReader { (camera: CameraViewProxy) in
+                CameraView(camera: .back, mirrored: false)
+                    .aspectRatio(1.0, contentMode: .fill)
+                    .processingFrameRate(.fps1)
+                    .frame(width: .greedy, height: size)
+                    .onReceive(camera._outputImageBufferPublisher?.receiveOnMainQueue()) { cvImage in
+                        Task { @MainActor in
+                            guard autoCapture, let image = cvImage._cgImage else {
+                                return
+                            }
+
+                            self.onImageCapture(AppKitOrUIKitImage(cgImage: image))
+                        }
+                    }
+            }
+        }
+        
+        @ViewBuilder
+        private func makeImageView(size: CGFloat) -> some View {
+            if let searchImage {
+                Image(image: searchImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .background(Color.almostClear)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        onImageTap()
+                    }
+            }
+        }
+        
+        @ViewBuilder
+        private func makeCaptureButton(
+            camera: CameraViewProxy
+        ) -> some View {
+            Button {
+                Task { @MainActor in
+                    do {
+                        autoCapture = false
+                        
+                        let image: AppKitOrUIKitImage = try await camera.capturePhoto()
+                        
+                        onImageCapture(image)
+                    } catch {
+                        runtimeIssue(error)
+                    }
+                }
+            } label: {
+                Label {
+                    Text("Capture Photo")
+                } icon: {
+                    Image(systemName: .cameraFill)
+                }
+                .font(.title2)
+                .controlSize(.large)
+                .padding(.small)
+            }
+            .buttonStyle(.borderedProminent)
+        }
+    }
+    
+    fileprivate struct SearchResultsView: View {
+        let geometry: GeometryProxy
+        let data: [String]
+        let onTap: (AppKitOrUIKitImage) -> Void
+        
+        var body: some View {
+            let imageOptimalWidth = 250.0
+            let minColumns = 3
+            
+            // Dynamically calculate the number of columns based on the available width,
+            // so that the images are displayed in a grid layout without any empty space
+            let numberOfColumns = Int(max(minColumns, Int(geometry.size.width / imageOptimalWidth)))
+            let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: numberOfColumns)
+            let width = geometry.size.width / CGFloat(numberOfColumns)
+            
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 0) {
+                    ForEach(data, id: \.self) { imageName in
+                        if let imagePath = Bundle.main.path(forResource: imageName, ofType: nil, inDirectory: "images"),
+                           let image = UIImage(contentsOfFile: imagePath) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: width, height: width)
+                                .onTapGesture {
+                                    onTap(image)
+                                }
+                        }
+                    }
+                    
+                }
+                
             }
         }
     }
@@ -231,3 +290,4 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+
