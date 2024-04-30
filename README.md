@@ -17,3 +17,21 @@ That same engine also enables geo-spatial search over the coordinates of the ima
     </td>
   </tr>
 </table>
+
+The demo app is capable of text-to-image and image-to-image search, can uses `vmanot/Media` to fetch the camera feed, embedding and searching frames on the fly.
+To test the demo:
+
+```bash
+# Clone the repo
+git clone https://github.com/ashvardanian/SwiftSemanticSearch.git
+
+# Change directory & decompress the images dataset.zip, which brings:
+#   - `images.names.txt` with newline-separated image names
+#   - `images.uform3-image-text-english-small.fbin` - precomputed embeddings
+#   - `images.uform3-image-text-english-small.usearch` - precomputed index
+#   - `images` - directory with images
+cd SwiftSemanticSearch
+unzip dataset.zip
+```
+
+After that, fire up the Xcode project and run the app on your iPhone 🍏 or iPad 🍏

@@ -1,9 +1,11 @@
-/dataset.zip
 /images
 /images.fbin
 /images.zip
 /images.csv
 /images.txt
+/images.names.txt
+/images.uform3-image-text-english-small.fbin
+/images.uform3-image-text-english-small.usearch
 
 /__MACOSX
 .DS_Store
