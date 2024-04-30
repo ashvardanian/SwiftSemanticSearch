@@ -34,4 +34,13 @@ cd SwiftSemanticSearch
 unzip dataset.zip
 ```
 
-After that, fire up the Xcode project and run the app on your iPhone 🍏 or iPad 🍏
+After that, fire up the Xcode project and run the app on your fruity device!
+
+---
+
+Links:
+
+- [Preprocessing datasets](https://github.com/ashvardanian/SwiftSemanticSearch/blob/main/images.ipynb)
+- [USearch Swift docs](https://unum-cloud.github.io/usearch/swift)
+- [Form Swift docs](https://unum-cloud.github.io/uform/swift)
+
