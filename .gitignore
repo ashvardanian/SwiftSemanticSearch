@@ -1,8 +1,10 @@
+/dataset.zip
 /images
 /images.fbin
 /images.zip
 /images.csv
 /images.txt
+
 /__MACOSX
 .DS_Store
 .swiftpm/

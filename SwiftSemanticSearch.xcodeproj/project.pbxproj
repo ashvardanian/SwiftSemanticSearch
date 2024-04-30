@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		463083282BDCAA2B006A644E /* Media in Frameworks */ = {isa = PBXBuildFile; productRef = 463083272BDCAA2B006A644E /* Media */; };
 		46B4675E2BD70804009D6420 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B4675D2BD70804009D6420 /* SearchModel.swift */; };
 		A208E9DC2BCB3A20005F91B5 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = A208E9DB2BCB3A20005F91B5 /* App.swift */; };
 		A208E9DE2BCB3A20005F91B5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A208E9DD2BCB3A20005F91B5 /* ContentView.swift */; };
 		A208E9E02BCB3A21005F91B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A208E9DF2BCB3A21005F91B5 /* Assets.xcassets */; };
 		A208E9E32BCB3A21005F91B5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A208E9E22BCB3A21005F91B5 /* Preview Assets.xcassets */; };
+		A2672E2F2BE02AB1001606F8 /* Media in Frameworks */ = {isa = PBXBuildFile; productRef = A2672E2E2BE02AB1001606F8 /* Media */; };
 		A297E7C42BD6FFCA00C478C2 /* UForm in Frameworks */ = {isa = PBXBuildFile; productRef = A297E7C32BD6FFCA00C478C2 /* UForm */; };
 		A2EABA6C2BCB4C8500CB4341 /* images.uform3-image-text-english-small.fbin in Resources */ = {isa = PBXBuildFile; fileRef = A2EABA692BCB4C8500CB4341 /* images.uform3-image-text-english-small.fbin */; };
 		A2EABA6E2BCB4C8500CB4341 /* images.names.txt in Resources */ = {isa = PBXBuildFile; fileRef = A2EABA6B2BCB4C8500CB4341 /* images.names.txt */; };
@@ -38,7 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				463083282BDCAA2B006A644E /* Media in Frameworks */,
+				A2672E2F2BE02AB1001606F8 /* Media in Frameworks */,
 				A297E7C42BD6FFCA00C478C2 /* UForm in Frameworks */,
 				A2EABA722BCB50CE00CB4341 /* USearch in Frameworks */,
 			);
@@ -114,7 +114,7 @@
 			packageProductDependencies = (
 				A2EABA712BCB50CE00CB4341 /* USearch */,
 				A297E7C32BD6FFCA00C478C2 /* UForm */,
-				463083272BDCAA2B006A644E /* Media */,
+				A2672E2E2BE02AB1001606F8 /* Media */,
 			);
 			productName = SwiftSemanticSearch;
 			productReference = A208E9D82BCB3A20005F91B5 /* SwiftSemanticSearch.app */;
@@ -321,7 +321,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftSemanticSearch/Preview Content\"";
-				DEVELOPMENT_TEAM = 4PWQ7VFGWM;
+				DEVELOPMENT_TEAM = 4J62EE2G74;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SwiftSemanticSearch/Info.plist;
@@ -354,7 +354,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftSemanticSearch/Preview Content\"";
-				DEVELOPMENT_TEAM = 4PWQ7VFGWM;
+				DEVELOPMENT_TEAM = 4J62EE2G74;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SwiftSemanticSearch/Info.plist;
@@ -438,9 +438,8 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		463083272BDCAA2B006A644E /* Media */ = {
+		A2672E2E2BE02AB1001606F8 /* Media */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 463083262BDCAA2B006A644E /* XCRemoteSwiftPackageReference "Media" */;
 			productName = Media;
 		};
 		A297E7C32BD6FFCA00C478C2 /* UForm */ = {

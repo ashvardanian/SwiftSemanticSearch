@@ -5,7 +5,7 @@
 import Media // For camera - https://github.com/vmanot/Media
 import SwiftUIX // For debounce - https://github.com/vmanot/SwiftUIX
 
-enum SearchMode: CaseIterable {
+enum SearchMode: String, CaseIterable, Codable, Hashable, Sendable {
     case text, videoStream, image
 }
 
@@ -21,9 +21,11 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
+            VStack(spacing: 0) {
                 contentForCurrentMode
+                    .clipped()
                 searchResultsView
+                    .clipped()
             }
             .navigationBarTitle("Unum ❤️ Apple", displayMode: .inline)
             .toolbar {
@@ -33,6 +35,7 @@ struct ContentView: View {
                 showAll()
             }
         }
+        .navigationViewStyle(.stack)
     }
     
     @ViewBuilder
@@ -93,7 +96,7 @@ struct ContentView: View {
     }
     
     private var searchResultsView: some View {
-        GeometryReader { geometry in
+        GeometryReader(alignment: .center) { geometry in
             SearchResultsView(geometry: geometry, data: filteredData, onTap: { image in
                 showSimilar(toImage: image)
                 searchMode = .image
@@ -150,7 +153,7 @@ extension ContentView {
         
         searchTask?.cancel()
         searchImage = image
-        searchTask = Task.detached(priority: .userInitiated) {
+        searchTask = Task.detached(priority: .high) {
             let result = try await searchModel.filter(withImage: cgImage)
             
             try Task.checkCancellation()
@@ -169,10 +172,10 @@ extension ContentView {
         let searchImage: AppKitOrUIKitImage?
         let onImageTap: () -> Void
         
-        @State private var autoCapture: Bool = false
+        @State private var autoCapture: Bool = true
         
         var body: some View {
-            GeometryReader { geo in
+            GeometryReader(alignment: .center) { geo in
                 let size = min(geo.size.width, geo.size.height)
                 switch searchMode {
                     case .videoStream:
@@ -188,16 +191,10 @@ extension ContentView {
         private func makeCameraView(size: CGFloat) -> some View {
             CameraViewReader { (camera: CameraViewProxy) in
                 CameraView(camera: .back, mirrored: false)
-                    .processingFrameRate(.fps15)
-                    .frame(width: size, height: size)
-                    .safeAreaInset(edge: .bottom) {
-                        VStack {
-                            makeCaptureButton(camera: camera)
-                            
-                            Toggle("Auto-capture", isOn: $autoCapture)
-                        }
-                    }
-                    .onReceive(camera._outputImageBufferPublisher) { cvImage in
+                    .aspectRatio(1.0, contentMode: .fill)
+                    .processingFrameRate(.fps1)
+                    .frame(width: .greedy, height: size)
+                    .onReceive(camera._outputImageBufferPublisher?.receiveOnMainQueue()) { cvImage in
                         Task { @MainActor in
                             guard autoCapture, let image = cvImage._cgImage else {
                                 return
@@ -214,9 +211,7 @@ extension ContentView {
             if let searchImage {
                 Image(image: searchImage)
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: size, height: size, alignment: .center)
-                    .scaledToFill()
+                    .aspectRatio(contentMode: .fill)
                     .background(Color.almostClear)
                     .contentShape(Rectangle())
                     .onTapGesture {

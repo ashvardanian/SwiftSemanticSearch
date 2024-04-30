@@ -15,6 +15,7 @@ class SearchModel: ObservableObject {
         case readyToSearch
     }
     
+    @MainActor
     @Published
     public var state: Set<StateFlag> = []
     
@@ -181,11 +182,19 @@ class SearchModel: ObservableObject {
             let queryEmbedding = try textEncoder.encode(query).asFloats()
             let results = imageIndex.search(vector: queryEmbedding, count: 100)
             
+            await Task.yield()
+            
+            try Task.checkCancellation()
+
             // Calculate the cosine similarity of each image's embedding to the query's embedding.
             let similarityScores = zip(results.0, results.1).map { (key: USearchKey, similarity: Float32) in
                 let imageName = allImageNames[Int(key)]
                 return (imageName, similarity)
             }
+            
+            await Task.yield()
+
+            try Task.checkCancellation()
             
             // Sort the images by descending similarity scores.
             return similarityScores
@@ -265,17 +274,18 @@ actor ImageIndexActor {
         rows: UInt32,
         columns: UInt32
     ) async throws {
-        let indexURL = URL.documentsDirectory.appending("appindex.usearch")
+        let indexPath = Bundle.main.resourcePath!.appending("/images.uform3-image-text-english-small.usearch")
+        let indexURL = URL(fileURLWithPath: indexPath)
         
         let imageIndex = USearchIndex.make(
             metric: .cos,
             dimensions: columns,
             connectivity: 0,
-            quantization: .F32
+            quantization: .F16
         )
         
         if FileManager.default.fileExists(at: indexURL) {
-            imageIndex.load(path: indexURL.path())
+            imageIndex.load(path: indexPath)
         } else {
             let _ = imageIndex.reserve(rows)
             
@@ -283,11 +293,10 @@ actor ImageIndexActor {
             
             await (0..<Int(rows)).concurrentForEach { (row: Int) in
                 let range: Range<Int> = Int(row * columns)..<Int((row + 1) * columns)
-                
                 let _ = imageIndex.add(key: UInt64(row), vector: matrix[range])
             }
             
-            imageIndex.save(path: indexURL.path())
+            imageIndex.save(path: indexPath)
         }
         
         searchModel.imageIndex = imageIndex
