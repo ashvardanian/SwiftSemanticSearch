@@ -1,2 +1,1 @@
-*.gif filter=lfs diff=lfs merge=lfs -text
-. !text !filter !merge !diff
+dataset.zip filter=lfs diff=lfs merge=lfs -text
