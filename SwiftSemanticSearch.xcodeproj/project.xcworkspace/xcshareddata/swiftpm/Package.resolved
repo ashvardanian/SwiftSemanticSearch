@@ -7,7 +7,7 @@
       "location" : "https://github.com/vmanot/CorePersistence.git",
       "state" : {
         "branch" : "main",
-        "revision" : "361b5dd5659fdeb47f3ecfd6fbd5331e69da6557"
+        "revision" : "38fd5271fa906a2d8395e4b42724142886a3c763"
       }
     },
     {
@@ -16,7 +16,7 @@
       "location" : "https://github.com/vmanot/Media.git",
       "state" : {
         "branch" : "main",
-        "revision" : "1b554a1e0cb35861a94fcff63dfc4375e7e9313d"
+        "revision" : "0ba2baaebeb58667955daef68d3535ba1b217a12"
       }
     },
     {
@@ -25,7 +25,7 @@
       "location" : "https://github.com/vmanot/Merge.git",
       "state" : {
         "branch" : "master",
-        "revision" : "dc4a3b9c4bb5a2be3080535cca86e069c256e34f"
+        "revision" : "e8bc37c8dc203cab481efedd71237c151882c007"
       }
     },
     {
@@ -34,7 +34,7 @@
       "location" : "https://github.com/vmanot/Swallow.git",
       "state" : {
         "branch" : "master",
-        "revision" : "53bc44c4614a45161ff01050e06e905c1b5e1e6e"
+        "revision" : "6227a1114e341daf54e90df61e173599b187a9b1"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
       "state" : {
-        "revision" : "94cf62b3ba8d4bed62680a282d4c25f9c63c2efb",
-        "version" : "1.1.0"
+        "revision" : "671108c96644956dddcd89dd59c203dcdb36cec7",
+        "version" : "1.1.4"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-syntax.git",
       "state" : {
-        "revision" : "fa8f95c2d536d6620cc2f504ebe8a6167c9fc2dd",
-        "version" : "510.0.1"
+        "revision" : "2bc86522d115234d1f588efe2bcb4ce4be8f8b82",
+        "version" : "510.0.3"
       }
     },
     {
@@ -87,7 +87,7 @@
       "location" : "https://github.com/SwiftUIX/SwiftUIX.git",
       "state" : {
         "branch" : "master",
-        "revision" : "a44a954005b31908454de8cc176f16cfdc9dd9f6"
+        "revision" : "836fc284a9bb07fc9ab6d2dce6ebd0e32aabde26"
       }
     },
     {
@@ -96,7 +96,7 @@
       "location" : "https://github.com/SwiftUIX/SwiftUIZ.git",
       "state" : {
         "branch" : "main",
-        "revision" : "98cb42a1ca684494e0104b6930122fab841b71b9"
+        "revision" : "4260778caf919fddb992d56d4235de2e030d0672"
       }
     },
     {
@@ -114,7 +114,7 @@
       "location" : "https://github.com/unum-cloud/usearch",
       "state" : {
         "branch" : "main",
-        "revision" : "5ea48c87c56a25ab57634a8f207f80ae675ed58e"
+        "revision" : "e7140e55967a4198f2bbd34987fa7597ebafa649"
       }
     }
   ],

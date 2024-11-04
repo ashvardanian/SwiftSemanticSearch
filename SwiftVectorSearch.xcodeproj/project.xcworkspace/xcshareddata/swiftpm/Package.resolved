@@ -1,4 +1,5 @@
 {
+  "originHash" : "ce0ab2afe11b0b4d307b08cee634a785136562aefbb651840d04dabefdfed439",
   "pins" : [
     {
       "identity" : "usearch",
@@ -6,9 +7,9 @@
       "location" : "https://github.com/unum-cloud/usearch",
       "state" : {
         "branch" : "main",
-        "revision" : "b1ea6ac208740dfdb68cfe846e3cb955fe38dc5a"
+        "revision" : "e7140e55967a4198f2bbd34987fa7597ebafa649"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
