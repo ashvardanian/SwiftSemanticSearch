@@ -274,6 +274,9 @@ actor ImageIndexActor {
         rows: UInt32,
         columns: UInt32
     ) async throws {
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let indexPathForSave = documentsDirectory.appendingPathComponent("images.uform3-image-text-english-small.usearch")
+
         let indexPath = Bundle.main.resourcePath!.appending("/images.uform3-image-text-english-small.usearch")
         let indexURL = URL(fileURLWithPath: indexPath)
         
@@ -296,7 +299,7 @@ actor ImageIndexActor {
                 let _ = imageIndex.add(key: UInt64(row), vector: matrix[range])
             }
             
-            imageIndex.save(path: indexPath)
+            imageIndex.save(path: indexPathForSave.path)
         }
         
         searchModel.imageIndex = imageIndex
