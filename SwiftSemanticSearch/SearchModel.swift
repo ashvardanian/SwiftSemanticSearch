@@ -288,8 +288,15 @@ actor ImageIndexActor {
         )
         
         if FileManager.default.fileExists(at: indexURL) {
+            print("Bundle index found. Load index from bundle file")
             imageIndex.load(path: indexPath)
-        } else {
+        }
+        else if FileManager.default.fileExists(at: indexPathForSave) {
+            print("Saved index found. Load index from saved index file")
+            imageIndex.load(path: indexPathForSave.path)
+        }
+        else {
+            print("No bundle or saved index found. Build index and save it.")
             let _ = imageIndex.reserve(rows)
             
             let columns = Int(columns)
