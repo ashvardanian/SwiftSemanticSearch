@@ -180,6 +180,7 @@ class SearchModel: ObservableObject {
         do {
             // Get the embedding for the query.
             let queryEmbedding = try textEncoder.encode(query).asFloats()
+            imageIndex.reserve(100)
             let results = imageIndex.search(vector: queryEmbedding, count: 100)
             
             await Task.yield()
