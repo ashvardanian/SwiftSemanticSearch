@@ -1,5 +1,5 @@
 {
-  "originHash" : "2962bb16a8702abe44a210c515d5203d95dbde41856e75e249f360c6673ef2a0",
+  "originHash" : "f89a9ca8981fb47416f633fc83ba5bd401d3d0d96324c9c4de94435810bc17dc",
   "pins" : [
     {
       "identity" : "corepersistence",
@@ -102,10 +102,10 @@
     {
       "identity" : "uform",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ashvardanian/uform/",
+      "location" : "https://github.com/unum-cloud/uform/",
       "state" : {
         "branch" : "main",
-        "revision" : "f4b19a8a3189a71a4a91c50d9c6ffa20f3f7694f"
+        "revision" : "7b79dbdd9a83cd8931590951a5dab841ec938818"
       }
     },
     {
