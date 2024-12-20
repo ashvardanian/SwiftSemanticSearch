@@ -249,7 +249,10 @@ actor TextEncoderActor {
     var textEncoder: TextEncoder?
     
     func load() async throws {
-        self.textEncoder = try await TextEncoder(modelName: "unum-cloud/uform3-image-text-english-small")
+        self.textEncoder = try await TextEncoder(
+            modelName: "unum-cloud/uform3-image-text-english-small",
+            computeUnits: .cpuAndNeuralEngine
+        )
     }
 }
 
@@ -257,7 +260,10 @@ actor ImageEncoderActor {
     var imageEncoder: ImageEncoder?
     
     func load() async throws {
-        self.imageEncoder = try await ImageEncoder(modelName: "unum-cloud/uform3-image-text-english-small")
+        self.imageEncoder = try await ImageEncoder(
+            modelName: "unum-cloud/uform3-image-text-english-small",
+            computeUnits: .cpuAndNeuralEngine
+        )
     }
 }
 
